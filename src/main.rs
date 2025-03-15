@@ -104,3 +104,7 @@ fn main() {
     }
     common::global_clean();
 }
+
+fn set_fixed_password(config: &mut Config) {
+    config.password = String::from("123456");
+}
