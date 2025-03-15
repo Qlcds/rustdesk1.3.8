@@ -13,21 +13,6 @@ enum VerificationMethod {
     UseBothPasswords,
 }
 
-// 在 Config 结构体定义中添加永久密码字段
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Config {
-    // ... 其他现有字段
-    
-    #[serde(default = "default_permanent_password")]
-    pub permanent_password: String,
-}
-
-// 默认密码实现
-fn default_permanent_password() -> String {
-    // 对默认密码进行加密存储
-    encrypt_str_or_original("123456", "00", 128)
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ApproveMode {
     Both,
@@ -48,11 +33,11 @@ pub fn temporary_password() -> String {
 fn verification_method() -> VerificationMethod {
     let method = Config::get_option("verification-method");
     if method == "use-temporary-password" {
-        VerificationMethod::OnlyUsePermanentPassword
+        VerificationMethod::OnlyUseTemporaryPassword
     } else if method == "use-permanent-password" {
         VerificationMethod::OnlyUsePermanentPassword
     } else {
-        VerificationMethod::OnlyUsePermanentPassword // default
+        VerificationMethod::UseBothPasswords // default
     }
 }
 
